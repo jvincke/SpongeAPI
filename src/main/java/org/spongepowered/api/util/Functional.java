@@ -83,7 +83,8 @@ public class Functional {
     }
 
     /**
-     * Get the value of an {@link Optional} as either a zero- or one-element immutable set.
+     * Get the value of an {@link Optional} as either a zero- or one-element
+     * immutable set.
      *
      * @param value The value to get as a set
      * @param <T> The type
@@ -94,8 +95,9 @@ public class Functional {
     }
 
     /**
-     * Execute a callable on <strong>the current thread</strong>, capturing the result or any exceptions that may be thrown into a {@link
-     * CompletableFuture}.
+     * Execute a callable on <strong>the current thread</strong>, capturing the
+     * result or any exceptions that may be thrown into a
+     * {@link CompletableFuture}.
      *
      * @param call The callable to execute
      * @param <T> The type of value returned
@@ -112,8 +114,8 @@ public class Functional {
     }
 
     /**
-     * Execute a callable on the provided executor, capturing the result or any exceptions that may be thrown into a {@link
-     * CompletableFuture}.
+     * Execute a callable on the provided executor, capturing the result or any
+     * exceptions that may be thrown into a {@link CompletableFuture}.
      *
      * @param call The callable to execute
      * @param exec The executor to execute this task on

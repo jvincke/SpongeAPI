@@ -24,118 +24,107 @@
  */
 package org.spongepowered.api.world.gen.populator;
 
+import org.spongepowered.api.data.type.PlantType;
 import org.spongepowered.api.util.weighted.VariableAmount;
+import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.gen.Populator;
 
 /**
- * Represents a populator which will randomly spawn a number of cacti within the
- * chunk. The cacti will only be spawned at valid locations, that is on top of a
- * sand block with no immediately surrounding blocks.
+ * Represents a populator which scatters flowers randomly around a chunk.
  */
-public interface Cactus extends Populator {
+public interface Flower extends Populator {
 
     /**
-     * Gets the number of cacti to spawn per chunk.
+     * Gets the number of flowers to attempt to spawn per chunk, must be greater
+     * than zero.
      * 
-     * @return The number of cacti to spawn
+     * @return The number to spawn
      */
-    VariableAmount getCactiPerChunk();
+    VariableAmount getFlowersPerChunk();
 
     /**
-     * Sets the number of cacti to spawn per chunk, cannot be negative.
+     * Sets the number of flowers to attempt to spawn per chunk, must be greater
+     * than zero.
      * 
      * <p><strong>Note:</strong> This number is not a definite number and the
-     * final count of cacti which are successfully spawned by the populator will
-     * almost always be lower.</p>
+     * final count of flowers which are successfully spawned by the populator
+     * will almost always be lower.</p>
      * 
-     * @param count The new number of cacti to spawn
+     * @param count The new amount to spawn
      */
-    void setCactiPerChunk(VariableAmount count);
+    void setFlowersPerChunk(VariableAmount count);
 
     /**
-     * Sets the number of cacti to spawn per chunk, cannot be negative.
+     * Sets the number of flowers to attempt to spawn per chunk, must be greater
+     * than zero.
      * 
      * <p><strong>Note:</strong> This number is not a definite number and the
-     * final count of cacti which are successfully spawned by the populator will
-     * almost always be lower.</p>
+     * final count of flowers which are successfully spawned by the populator
+     * will almost always be lower.</p>
      * 
-     * @param count The new number of cacti to spawn
+     * @param count The new amount to spawn
      */
-    default void setCactiPerChunk(int count) {
-        setCactiPerChunk(VariableAmount.fixed(count));
+    default void setFlowersPerChunk(int count) {
+        setFlowersPerChunk(VariableAmount.fixed(count));
     }
 
     /**
-     * Gets the height of the cacti.
+     * Gets a mutable weighted collection of plant type for this populator to
+     * spawn.
      * 
-     * @return The height
+     * @return The plant types
      */
-    VariableAmount getHeight();
+    WeightedTable<PlantType> getFlowerTypes();
 
     /**
-     * Sets the height of the cacti.
-     * 
-     * @param height The new height
-     */
-    void setHeight(VariableAmount height);
-
-    /**
-     * Sets the height of the cacti.
-     * 
-     * @param count The new height
-     */
-    default void setHeight(int count) {
-        setHeight(VariableAmount.fixed(count));
-    }
-
-    /**
-     * A builder for constructing {@link Cactus} populators.
+     * A builder for constructing {@link Flower} populators.
      */
     interface Builder {
 
         /**
-         * Sets the number of cacti to spawn per chunk, cannot be negative.
+         * Sets the number of flowers to attempt to spawn per chunk, must be
+         * greater than zero.
          * 
          * <p><strong>Note:</strong> This number is not a definite number and
-         * the final count of cacti which are successfully spawned by the
+         * the final count of flowers which are successfully spawned by the
          * populator will almost always be lower.</p>
          * 
-         * @param count The new number of cacti to spawn
+         * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        Builder cactiPerChunk(VariableAmount count);
+        Builder perChunk(VariableAmount count);
 
         /**
-         * Sets the number of cacti to spawn per chunk, cannot be negative.
+         * Sets the number of flowers to attempt to spawn per chunk, must be
+         * greater than zero.
          * 
          * <p><strong>Note:</strong> This number is not a definite number and
-         * the final count of cacti which are successfully spawned by the
+         * the final count of flowers which are successfully spawned by the
          * populator will almost always be lower.</p>
          * 
-         * @param count The new number of cacti to spawn
+         * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        default Builder cactiPerChunk(int count) {
-            return cactiPerChunk(VariableAmount.fixed(count));
+        default Builder perChunk(int count) {
+            return perChunk(VariableAmount.fixed(count));
         }
 
         /**
-         * Sets the height of the cacti.
+         * Sets the plant types for this populator to spawn.
          * 
-         * @param count The new height
+         * @param types The plant types to spawn
          * @return This builder, for chaining
          */
-        Builder height(VariableAmount height);
+        Builder types(WeightedTable<PlantType> types);
 
         /**
-         * Sets the height of the cacti.
+         * Adds the plant type to the list of types to spawn with the given weight.
          * 
-         * @param count The new height
+         * @param type The plant type to spawn
+         * @param weight The weight of the type
          * @return This builder, for chaining
          */
-        default Builder height(int height) {
-            return height(VariableAmount.fixed(height));
-        }
+        Builder type(PlantType type, double weight);
 
         /**
          * Resets this builder to the default values.
@@ -145,14 +134,14 @@ public interface Cactus extends Populator {
         Builder reset();
 
         /**
-         * Builds a new instance of a {@link Cactus} populator with the settings
-         * set within the builder.
+         * Builds a new instance of a {@link Flower} populator with the
+         * settings set within the builder.
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
          *         which do not have default values
          */
-        Cactus build() throws IllegalStateException;
+        Flower build() throws IllegalStateException;
 
     }
 

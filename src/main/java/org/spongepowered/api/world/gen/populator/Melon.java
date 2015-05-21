@@ -24,66 +24,64 @@
  */
 package org.spongepowered.api.world.gen.populator;
 
-import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.world.gen.Populator;
 
 /**
- * Represents a populator which places random liquid sources in walls of caves
- * or the terrain of the chunk.
+ * Represents a populator which scatters melons randomly around the chunk.
  */
-public interface RandomLiquids extends Populator {
+public interface Melon extends Populator {
 
     /**
-     * Gets the {@link BlockState} of the liquid to fill the lake with.
+     * Gets the number of melons to attempt to spawn per chunk, must be greater
+     * than zero.
      * 
-     * @return The lake block state
+     * @return The number to spawn
      */
-    BlockState getLiquidType();
+    VariableAmount getMelonsPerChunk();
 
     /**
-     * Sets the {@link BlockState} of the liquid to fill the lake with.
+     * Sets the number of melons to attempt to spawn per chunk, must be greater
+     * than zero. The default value is 64.
      * 
-     * @param liquid The new lake block state
+     * @param count The new amount to spawn
      */
-    void setLiquidType(BlockState liquid);
+    void setMelonsPerChunk(VariableAmount count);
 
     /**
-     * Gets the number of liquid sources to attempt to spawn per chunk, must be
-     * greater than zero. The default is 20 for lava and 50 for water.
+     * Sets the number of melons to attempt to spawn per chunk, must be greater
+     * than zero. The default value is 64.
      * 
-     * @return The number of attempts to make
+     * @param count The new amount to spawn
      */
-    int getAttemptsPerChunk();
+    default void setMelonsPerChunk(int count) {
+        setMelonsPerChunk(VariableAmount.fixed(count));
+    }
 
     /**
-     * Sets the number of liquid sources to attempt to spawn per chunk, must be
-     * greater than zero. The default is 20 for lava and 50 for water.
-     * 
-     * @param attempts The new number of attempts to make
-     */
-    void setAttemptsPerChunk(int attempts);
-
-    /**
-     * A builder for constructing {@link RandomLiquids} populators.
+     * A builder for constructing {@link Melon} populators.
      */
     interface Builder {
 
         /**
-         * Sets the {@link BlockState} of the liquid to fill the lake with.
+         * Sets the number of melons to attempt to spawn per chunk. The default
+         * value is 64.
          * 
-         * @param liquid The new lake block state
+         * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        Builder liquidType(BlockState liquid);
+        Builder perChunk(VariableAmount count);
 
         /**
-         * Sets the number of liquid sources to attempt to spawn per chunk, must
-         * be greater than zero. The default is 20 for lava and 50 for water.
+         * Sets the number of melons to attempt to spawn per chunk. The default
+         * value is 64.
          * 
-         * @param attempts The new number of attempts to make
+         * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        Builder perChunk(int attempts);
+        default Builder perChunk(int count) {
+            return perChunk(VariableAmount.fixed(count));
+        }
 
         /**
          * Resets this builder to the default values.
@@ -93,14 +91,14 @@ public interface RandomLiquids extends Populator {
         Builder reset();
 
         /**
-         * Builds a new instance of a {@link RandomLiquids} populator with the
-         * settings set within the builder.
+         * Builds a new instance of a {@link Melon} populator with the settings
+         * set within the builder.
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
-        RandomLiquids build() throws IllegalStateException;
+        Melon build() throws IllegalStateException;
 
     }
 

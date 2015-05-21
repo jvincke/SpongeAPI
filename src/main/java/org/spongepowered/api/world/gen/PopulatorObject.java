@@ -31,8 +31,6 @@ import java.util.Random;
 /**
  * Represents an object placed in the world during terrain population. Populator
  * objects typically fit in a single chunk.
- *
- * @see PopulatorObjects
  */
 public interface PopulatorObject {
 

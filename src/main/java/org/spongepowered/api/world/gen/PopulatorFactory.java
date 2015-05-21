@@ -27,27 +27,27 @@ package org.spongepowered.api.world.gen;
 import org.spongepowered.api.world.gen.populator.BigMushroom;
 import org.spongepowered.api.world.gen.populator.BlockBlob;
 import org.spongepowered.api.world.gen.populator.Cactus;
+import org.spongepowered.api.world.gen.populator.DeadBush;
 import org.spongepowered.api.world.gen.populator.DesertWell;
 import org.spongepowered.api.world.gen.populator.DoublePlant;
 import org.spongepowered.api.world.gen.populator.Dungeon;
 import org.spongepowered.api.world.gen.populator.EnderCrystalPlatform;
-import org.spongepowered.api.world.gen.populator.Flowers;
+import org.spongepowered.api.world.gen.populator.Flower;
 import org.spongepowered.api.world.gen.populator.Forest;
 import org.spongepowered.api.world.gen.populator.Glowstone;
-import org.spongepowered.api.world.gen.populator.HugeTree;
 import org.spongepowered.api.world.gen.populator.IcePath;
 import org.spongepowered.api.world.gen.populator.IceSpike;
-import org.spongepowered.api.world.gen.populator.JungleBush;
 import org.spongepowered.api.world.gen.populator.Lake;
-import org.spongepowered.api.world.gen.populator.Melons;
+import org.spongepowered.api.world.gen.populator.Melon;
+import org.spongepowered.api.world.gen.populator.Mushroom;
 import org.spongepowered.api.world.gen.populator.Ore;
 import org.spongepowered.api.world.gen.populator.Pumpkin;
-import org.spongepowered.api.world.gen.populator.RandomFire;
-import org.spongepowered.api.world.gen.populator.RandomLiquids;
-import org.spongepowered.api.world.gen.populator.Reeds;
+import org.spongepowered.api.world.gen.populator.RandomBlock;
+import org.spongepowered.api.world.gen.populator.RandomObject;
+import org.spongepowered.api.world.gen.populator.Reed;
 import org.spongepowered.api.world.gen.populator.SeaFloor;
 import org.spongepowered.api.world.gen.populator.Shrub;
-import org.spongepowered.api.world.gen.populator.Vines;
+import org.spongepowered.api.world.gen.populator.Vine;
 import org.spongepowered.api.world.gen.populator.WaterLily;
 
 /**
@@ -84,6 +84,13 @@ public interface PopulatorFactory {
     DesertWell.Builder createDesertWellPopulator();
 
     /**
+     * Creates a new {@link DeadBush} populator builder.
+     * 
+     * @return A new builder instance
+     */
+    DeadBush.Builder createDeadBushPopulator();
+
+    /**
      * Creates a new {@link DoublePlant} populator builder.
      * 
      * @return A new builder instance
@@ -105,11 +112,11 @@ public interface PopulatorFactory {
     EnderCrystalPlatform.Builder createEnderCrystalPlatformPopulator();
 
     /**
-     * Creates a new {@link Flowers} populator builder.
+     * Creates a new {@link Flower} populator builder.
      * 
      * @return A new builder instance
      */
-    Flowers.Builder createFlowerPopulator();
+    Flower.Builder createFlowerPopulator();
 
     /**
      * Creates a new {@link Forest} populator builder.
@@ -126,13 +133,6 @@ public interface PopulatorFactory {
     Glowstone.Builder createGlowstonePopulator();
 
     /**
-     * Creates a new {@link HugeTree} populator builder.
-     * 
-     * @return A new builder instance
-     */
-    HugeTree.Builder createHugeTreePopulator();
-
-    /**
      * Creates a new {@link IcePath} populator builder.
      * 
      * @return A new builder instance
@@ -147,13 +147,6 @@ public interface PopulatorFactory {
     IceSpike.Builder createIceSpikePopulator();
 
     /**
-     * Creates a new {@link JungleBush} populator builder.
-     * 
-     * @return A new builder instance
-     */
-    JungleBush.Builder createJungleBushPopulator();
-
-    /**
      * Creates a new {@link Lake} populator builder.
      * 
      * @return A new builder instance
@@ -161,11 +154,18 @@ public interface PopulatorFactory {
     Lake.Builder createLakePopulator();
 
     /**
-     * Creates a new {@link Melons} populator builder.
+     * Creates a new {@link Melon} populator builder.
      * 
      * @return A new builder instance
      */
-    Melons.Builder createMelonPopulator();
+    Melon.Builder createMelonPopulator();
+
+    /**
+     * Creates a new {@link Mushroom} populator builder.
+     * 
+     * @return A new builder instance
+     */
+    Mushroom.Builder createMushroomPopulator();
 
     /**
      * Creates a new {@link Ore} populator builder.
@@ -182,25 +182,25 @@ public interface PopulatorFactory {
     Pumpkin.Builder createPumpkinPopulator();
 
     /**
-     * Creates a new {@link RandomFire} populator builder.
+     * Creates a new {@link RandomBlock} populator builder.
      * 
      * @return A new builder instance
      */
-    RandomFire.Builder createRandomFirePopulator();
+    RandomBlock.Builder createRandomBlockPopulator();
 
     /**
-     * Creates a new {@link RandomLiquids} populator builder.
+     * Creates a new {@link RandomObject} populator builder.
      * 
      * @return A new builder instance
      */
-    RandomLiquids.Builder createRandomLiquidsPopulator();
+    RandomObject.Builder createRandomObjectPopulator();
 
     /**
-     * Creates a new {@link Reeds} populator builder.
+     * Creates a new {@link Reed} populator builder.
      * 
      * @return A new builder instance
      */
-    Reeds.Builder createReedsPopulator();
+    Reed.Builder createReedPopulator();
 
     /**
      * Creates a new {@link SeaFloor} populator builder.
@@ -217,11 +217,11 @@ public interface PopulatorFactory {
     Shrub.Builder createShrubPopulator();
 
     /**
-     * Creates a new {@link Vines} populator builder.
+     * Creates a new {@link Vine} populator builder.
      * 
      * @return A new builder instance
      */
-    Vines.Builder createVinesPopulator();
+    Vine.Builder createVinePopulator();
 
     /**
      * Creates a new {@link WaterLily} populator builder.
@@ -230,4 +230,6 @@ public interface PopulatorFactory {
      */
     WaterLily.Builder createWaterLilyPopulator();
 
+    PopulatorObject getDesertWellObject();
+    
 }

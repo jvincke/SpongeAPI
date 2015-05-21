@@ -24,68 +24,64 @@
  */
 package org.spongepowered.api.world.gen.populator;
 
+import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.world.gen.Populator;
-import org.spongepowered.api.world.gen.type.BiomeTreeType;
 
 /**
- * Represents a populator which spawns the huge tree variants of the standard
- * trees.
+ * Represents a populator which places down dead bushes within the chunk.
  */
-public interface HugeTree extends Populator {
+public interface DeadBush extends Populator {
 
     /**
-     * Gets the number of trees to attempt to spawn per chunk, must be greater
+     * Gets the number of bushes to attempt to spawn per chunk, must be greater
      * than zero.
      * 
-     * @return The number to spawn
+     * @return The amount of shrubs to spawn
      */
-    int getTreesPerChunk();
+    VariableAmount getShrubsPerChunk();
 
     /**
-     * Sets the number of trees to attempt to spawn per chunk, must be greater
+     * Sets the number of bushes to attempt to spawn per chunk, must be greater
      * than zero.
      * 
-     * @param count The new amount to spawn
+     * @param count The new amount of shrubs to spawn
      */
-    void setTreesPerChunk(int count);
+    void setShrubsPerChunk(VariableAmount count);
 
     /**
-     * Gets the type of huge tree to spawn.
+     * Sets the number of bushes to attempt to spawn per chunk, must be greater
+     * than zero.
      * 
-     * @return The tree type
+     * @param count The new amount of shrubs to spawn
      */
-    BiomeTreeType getType();
+    default void setShrubsPerChunk(int count) {
+        setShrubsPerChunk(VariableAmount.fixed(count));
+    }
 
     /**
-     * Sets the type of huge tree to spawn. If the given type does not have a
-     * valid huge tree equivalent then this method will have no effect.
-     * 
-     * @param type The new tree type
-     */
-    void setType(BiomeTreeType type);
-
-    /**
-     * A builder for constructing {@link HugeTree} populators.
+     * A builder for constructing {@link DeadBush} populators.
      */
     interface Builder {
 
         /**
-         * Sets the number of trees to attempt to spawn per chunk, must be
+         * Sets the number of bushes to attempt to spawn per chunk, must be
          * greater than zero.
          * 
-         * @param count The new amount to spawn
+         * @param count The new amount of bushes to spawn
          * @return This builder, for chaining
          */
-        Builder perChunk(int count);
+        Builder perChunk(VariableAmount count);
 
         /**
-         * Sets the type of huge tree to spawn. If the given type does not have
-         * a valid huge tree equivalent then this method will have no effect.
+         * Sets the number of bushes to attempt to spawn per chunk, must be
+         * greater than zero.
          * 
-         * @param type The new tree type
+         * @param count The new amount of bushes to spawn
          * @return This builder, for chaining
          */
-        Builder type(BiomeTreeType type);
+        default Builder perChunk(int count) {
+            return perChunk(VariableAmount.fixed(count));
+        }
 
         /**
          * Resets this builder to the default values.
@@ -95,14 +91,14 @@ public interface HugeTree extends Populator {
         Builder reset();
 
         /**
-         * Builds a new instance of a {@link HugeTree} populator with the
-         * settings set within the builder.
+         * Builds a new instance of a {@link DeadBush} populator with the settings
+         * set within the builder.
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
-        HugeTree build() throws IllegalStateException;
+        DeadBush build() throws IllegalStateException;
 
     }
 

@@ -24,24 +24,26 @@
  */
 package org.spongepowered.api.world.gen.populator;
 
+import org.spongepowered.api.util.weighted.ChanceTable;
 import org.spongepowered.api.util.weighted.VariableAmount;
-import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.gen.Populator;
-import org.spongepowered.api.world.gen.PopulatorObject;
+import org.spongepowered.api.world.gen.type.MushroomType;
+import org.spongepowered.api.world.gen.type.MushroomTypes;
 
 /**
  * Represents a populator which places a number of mushrooms. The type of
  * mushroom to place can be set or can be randomized.
  */
-public interface BigMushroom extends Populator {
+public interface Mushroom extends Populator {
 
     /**
-     * Gets a mutable {@link WeightedTable} of possible mushroom types to
-     * spawn.
+     * Gets a mutable {@link ChanceTable} of possible mushroom types to spawn.
+     * If the list is empty then a {@link MushroomType} will be selected at
+     * random from all available {@link MushroomTypes}.
      * 
      * @return The weighted list
      */
-    WeightedTable<PopulatorObject> getTypes();
+    ChanceTable<MushroomType> getType();
 
     /**
      * Gets a representation of the amount of mushrooms which will be attempted
@@ -82,28 +84,28 @@ public interface BigMushroom extends Populator {
     }
 
     /**
-     * A builder for constructing {@link BigMushroom} populators.
+     * A builder for constructing {@link Mushroom} populators.
      */
     interface Builder {
 
         /**
-         * Sets the weighted {@link PopulatorObject}s to select from during
+         * Sets the weighted {@link MushroomType}s to select from during
          * generation.
          * 
          * @param types The weighted types
          * @return This builder, for chaining
          */
-        Builder types(WeightedTable<PopulatorObject> types);
+        Builder types(ChanceTable<MushroomType> types);
 
         /**
-         * Adds the weighted {@link PopulatorObject} to the list of available
+         * Adds the weighted {@link MushroomType} to the list of available
          * types.
          * 
          * @param type The new weighted type
          * @param weight The weight of the new type
          * @return This builder, for chaining
          */
-        Builder type(PopulatorObject type, double weight);
+        Builder type(MushroomType type, double weight);
 
         /**
          * Sets the number of mushrooms which will be attempted to be spawned.
@@ -139,14 +141,14 @@ public interface BigMushroom extends Populator {
         Builder reset();
 
         /**
-         * Builds a new instance of a {@link BigMushroom} populator with the
+         * Builds a new instance of a {@link Mushroom} populator with the
          * settings set within the builder.
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
          *         which do not have default values
          */
-        BigMushroom build() throws IllegalStateException;
+        Mushroom build() throws IllegalStateException;
 
     }
 

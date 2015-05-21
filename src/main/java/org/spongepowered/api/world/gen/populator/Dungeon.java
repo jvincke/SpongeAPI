@@ -26,12 +26,12 @@ package org.spongepowered.api.world.gen.populator;
 
 import org.spongepowered.api.data.manipulator.mutable.MobSpawnerData;
 import org.spongepowered.api.entity.EntitySnapshot;
-import org.spongepowered.api.util.weighted.WeightedCollection;
-import org.spongepowered.api.util.weighted.WeightedItem;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
+import org.spongepowered.api.util.weighted.LootTable;
+import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.util.weighted.WeightedSerializableObject;
+import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.gen.Populator;
-
-import java.util.Collection;
 
 /**
  * Represents a which places 'Dungeon's randomly underground. Each dungeon has
@@ -45,7 +45,7 @@ public interface Dungeon extends Populator {
      * 
      * @return The number of attempts
      */
-    int getAttemptsPerChunk();
+    VariableAmount getAttemptsPerChunk();
 
     /**
      * Sets the number of attempts at randomly spawning a generator per chunk.
@@ -53,7 +53,17 @@ public interface Dungeon extends Populator {
      * 
      * @param attempts The new number of attempts
      */
-    void setAttemptsPerChunk(int attempts);
+    void setAttemptsPerChunk(VariableAmount attempts);
+
+    /**
+     * Sets the number of attempts at randomly spawning a generator per chunk.
+     * The default is 8.
+     * 
+     * @param attempts The new number of attempts
+     */
+    default void setAttemptsPerChunk(int attempts) {
+        setAttemptsPerChunk(VariableAmount.fixed(attempts));
+    }
 
     /**
      * Gets the {@link MobSpawnerData} which represents the MobSpawner which
@@ -64,27 +74,13 @@ public interface Dungeon extends Populator {
     MobSpawnerData getSpawnerData();
 
     /**
-     * Gets a mutable List of possible contents of the chests. Items will be
-     * randomly selected from this list based on weight in order to calculate
-     * the contents of chests placed within the dungeon.
+     * Gets a mutable weighted collection of possible contents of the chests.
+     * Items will be randomly selected from this list based on weight in order
+     * to calculate the contents of chests placed within the dungeon.
      * 
      * @return The contents list
      */
-    WeightedCollection<WeightedItem> getPossibleContents();
-
-    /**
-     * Gets the number of items which will spawn per chest.
-     * 
-     * @return The number of items
-     */
-    int itemCount();
-
-    /**
-     * Sets the number of items which will spawn per chest.
-     * 
-     * @param count The new item count
-     */
-    void setItemCount(int count);
+    LootTable<ItemStackSnapshot> getPossibleContents();
 
     /**
      * A builder for constructing {@link Dungeon} populators.
@@ -98,7 +94,18 @@ public interface Dungeon extends Populator {
          * @param attempts The new number of attempts
          * @return This builder, for chaining
          */
-        Builder attempts(int attempts);
+        Builder attempts(VariableAmount attempts);
+
+        /**
+         * Sets the number of attempts at randomly spawning a generator per
+         * chunk. The default is 8.
+         * 
+         * @param attempts The new number of attempts
+         * @return This builder, for chaining
+         */
+        default Builder attempts(int attempts) {
+            return attempts(VariableAmount.fixed(attempts));
+        }
 
         /**
          * Sets the {@link MobSpawnerData} which represents the MobSpawner which
@@ -174,51 +181,24 @@ public interface Dungeon extends Populator {
         Builder spawnRange(short range);
 
         /**
-         * Defines a number of {@link WeightedSerializableObject}s from which the type
-         * of each batch will be randomly selected based on the weighting value.
+         * Defines a number of {@link WeightedSerializableObject}s from which
+         * the type of each batch will be randomly selected based on the
+         * weighting value.
          *
          * @param entities The possible entities
          * @return This builder, for chaining
          */
-        @SuppressWarnings({"unchecked", "varargs"})
-        Builder possibleEntities(WeightedSerializableObject<EntitySnapshot>... entities);
+        Builder possibleEntities(WeightedTable<EntitySnapshot> entities);
 
         /**
-         * Defines a number of {@link WeightedSerializableObject}s from which the type
-         * of each batch will be randomly selected based on the weighting value.
-         *
-         * @param entities The possible entities
-         * @return This builder, for chaining
-         */
-        Builder possibleEntities(Collection<WeightedSerializableObject<EntitySnapshot>> entities);
-
-        /**
-         * Defines a number of {@link WeightedItem}s from which items
-         * will be randomly selected based on weight in order to calculate the
-         * contents of chests placed within the dungeon.
+         * Defines a number of {@link WeightedItem}s from which items will be
+         * randomly selected based on weight in order to calculate the contents
+         * of chests placed within the dungeon.
          *
          * @param items The possible items
          * @return This builder, for chaining
          */
-        Builder possibleItems(WeightedItem... items);
-
-        /**
-         * Defines a number of {@link WeightedItem}s from which items
-         * will be randomly selected based on weight in order to calculate the
-         * contents of chests placed within the dungeon.
-         *
-         * @param items The possible items
-         * @return This builder, for chaining
-         */
-        Builder possibleItems(Collection<WeightedItem> items);
-
-        /**
-         * Sets the number of items which will spawn per chest.
-         * 
-         * @param count The new item count
-         * @return This builder, for chaining
-         */
-        Builder itemsQuantity(int count);
+        Builder possibleItems(LootTable<ItemStackSnapshot> items);
 
         /**
          * Resets this builder to the default values.
@@ -233,7 +213,7 @@ public interface Dungeon extends Populator {
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
         Dungeon build() throws IllegalStateException;
 

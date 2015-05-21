@@ -24,69 +24,87 @@
  */
 package org.spongepowered.api.world.gen.populator;
 
-import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.world.gen.Populator;
 
 /**
- * Represents a populator which creates fires on the surfaces of targeted
- * blocks. In vanilla this is used to create random fires in the Nether.
+ * Represents a populator which spawns in reeds near valid water sources within
+ * the chunk.
  */
-public interface RandomFire extends Populator {
+public interface Reed extends Populator {
 
     /**
-     * Gets the number of fires to attempt to spawn per chunk, must be greater
+     * Gets the number of reeds to attempt to spawn per chunk, must be greater
      * than zero.
      * 
-     * @return The number to spawn
+     * @return The amount to spawn
      */
-    int getFirePerChunk();
+    VariableAmount getReedsPerChunk();
 
     /**
-     * Sets the number of fires to attempt to spawn per chunk, must be greater
+     * Sets the number of reeds to attempt to spawn per chunk, must be greater
      * than zero.
      * 
-     * @param count The new number to spawn
+     * @param count The new amount to spawn
      */
-    void setFirePerChunk(int count);
+    void setReedsPerChunk(VariableAmount count);
 
     /**
-     * Gets the block type targeted by this populator, fires will only be
-     * started when on top of this block type.
+     * Sets the number of reeds to attempt to spawn per chunk, must be greater
+     * than zero.
      * 
-     * @return The targeted block
+     * @param count The new amount to spawn
      */
-    BlockType getPlacementTarget();
+    default void setReedsPerChunk(int count) {
+        setReedsPerChunk(VariableAmount.fixed(count));
+    }
 
     /**
-     * Sets the block type targeted by this populator, fires will only be
-     * started when on top of this block type.
+     * Gets the height of the reeds to generate.
      * 
-     * @param target The new targeted block
+     * @return The reed height
      */
-    void setPlacementTarget(BlockType target);
+    VariableAmount getReedHeight();
 
     /**
-     * A builder for constructing {@link RandomFire} populators.
+     * Sets the height of the reeds to generate.
+     * 
+     * @param height The new reed height
+     */
+    void setReedHeight(VariableAmount height);
+
+    /**
+     * A builder for constructing {@link Reed} populators.
      */
     interface Builder {
 
         /**
-         * Sets the number of fires to attempt to spawn per chunk, must be
+         * Sets the number of reeds to attempt to spawn per chunk, must be
          * greater than zero.
          * 
-         * @param count The new number to spawn
+         * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        Builder perChunk(int count);
+        Builder perChunk(VariableAmount count);
 
         /**
-         * Sets the block type targeted by this populator, fires will only be
-         * started when on top of this block type.
+         * Sets the number of reeds to attempt to spawn per chunk, must be
+         * greater than zero.
          * 
-         * @param target The new targeted block
+         * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        Builder placementTarget(BlockType target);
+        default Builder perChunk(int count) {
+            return perChunk(VariableAmount.fixed(count));
+        }
+
+        /**
+         * Sets the height of the reeds to generate.
+         * 
+         * @param height The new reed height
+         * @return This builder, for chaining
+         */
+        Builder reedHeight(VariableAmount height);
 
         /**
          * Resets this builder to the default values.
@@ -96,14 +114,14 @@ public interface RandomFire extends Populator {
         Builder reset();
 
         /**
-         * Builds a new instance of a {@link RandomFire} populator with the
-         * settings set within the builder.
+         * Builds a new instance of a {@link Reed} populator with the settings
+         * set within the builder.
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
-        RandomFire build() throws IllegalStateException;
+        Reed build() throws IllegalStateException;
 
     }
 

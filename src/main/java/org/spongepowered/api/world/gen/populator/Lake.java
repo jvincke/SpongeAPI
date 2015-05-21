@@ -25,6 +25,7 @@
 package org.spongepowered.api.world.gen.populator;
 
 import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.world.gen.Populator;
 
 /**
@@ -48,22 +49,34 @@ public interface Lake extends Populator {
     void setLiquidType(BlockState liquid);
 
     /**
-     * Gets the chance of a lake spawning in a chunk. The default value is 4 for
-     * water lakes and 80 for lava lakes (therefore equating to a 1 in 4 chance
-     * and a 1 in 80 chance respectively).
+     * Gets the probability of a lake spawning in a chunk.
      * 
-     * @return The lake spawn chance
+     * @return The lake spawn probability
      */
-    int getLakeChance();
+    double getLakeProbability();
 
     /**
-     * Sets the chance of a lake spawning in a chunk. The default value is 4 for
-     * water lakes and 80 for lava lakes (therefore equating to a 1 in 4 chance
-     * and a 1 in 80 chance respectively).
+     * Sets the probability of a lake spawning in a chunk. The default value is
+     * 0.25 for water lakes and 0.0125 for lava lakes (therefore equating to a 1
+     * in 4 chance and a 1 in 80 chance respectively).
      * 
-     * @param chance The new lake spawn chance
+     * @param p The new lake spawn probability
      */
-    void setLakeChance(int chance);
+    void setLakeProbability(double p);
+    
+    /**
+     * Gets the height that this lake will be spawned at.
+     * 
+     * @return The height
+     */
+    VariableAmount getHeight();
+    
+    /**
+     * Sets the height that this lake will be spawned at.
+     * 
+     * @param height The new height
+     */
+    void setHeight(VariableAmount height);
 
     /**
      * A builder for constructing {@link Lake} populators.
@@ -79,14 +92,22 @@ public interface Lake extends Populator {
         Builder liquidType(BlockState liquid);
 
         /**
-         * Sets the chance of a lake spawning in a chunk. The default value is 4
-         * for water lakes and 80 for lava lakes (therefore equating to a 1 in 4
-         * chance and a 1 in 80 chance respectively).
+         * Sets the probability of a lake spawning in a chunk. The default value
+         * is 0.25 for water lakes and 0.0125 for lava lakes (therefore equating
+         * to a 1 in 4 chance and a 1 in 80 chance respectively).
          * 
-         * @param chance The new lake spawn chance
+         * @param p The new lake spawn probability
          * @return This builder, for chaining
          */
-        Builder chance(int chance);
+        Builder chance(double p);
+        
+        /**
+         * Sets the height that the lake will be spawned at.
+         * 
+         * @param height The new height
+         * @return This builder, for chaining
+         */
+        Builder height(VariableAmount height);
 
         /**
          * Resets this builder to the default values.
@@ -101,7 +122,7 @@ public interface Lake extends Populator {
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
         Lake build() throws IllegalStateException;
 

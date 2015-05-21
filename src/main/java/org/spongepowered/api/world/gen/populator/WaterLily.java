@@ -24,6 +24,7 @@
  */
 package org.spongepowered.api.world.gen.populator;
 
+import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.world.gen.Populator;
 
 /**
@@ -33,11 +34,11 @@ public interface WaterLily extends Populator {
 
     /**
      * Gets the number of water lilies to attempt to spawn per chunk, must be
-     * greater than zero. The default value is 4.
+     * greater than zero.
      * 
      * @return The amount to spawn
      */
-    int getWaterLilyPerChunk();
+    VariableAmount getWaterLilyPerChunk();
 
     /**
      * Sets the number of water lilies to attempt to spawn per chunk, must be
@@ -45,7 +46,17 @@ public interface WaterLily extends Populator {
      * 
      * @param count The new amount to spawn
      */
-    void setWaterLilyPerChunk(int count);
+    void setWaterLilyPerChunk(VariableAmount count);
+
+    /**
+     * Sets the number of water lilies to attempt to spawn per chunk, must be
+     * greater than zero. The default value is 4.
+     * 
+     * @param count The new amount to spawn
+     */
+    default void setWaterLilyPerChunk(int count) {
+        setWaterLilyPerChunk(VariableAmount.fixed(count));
+    }
 
     /**
      * A builder for constructing {@link WaterLily} populators.
@@ -59,7 +70,18 @@ public interface WaterLily extends Populator {
          * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        Builder perChunk(int count);
+        Builder perChunk(VariableAmount count);
+
+        /**
+         * Sets the number of water lilies to attempt to spawn per chunk, must
+         * be greater than zero. The default value is 4.
+         * 
+         * @param count The new amount to spawn
+         * @return This builder, for chaining
+         */
+        default Builder perChunk(int count) {
+            return perChunk(VariableAmount.fixed(count));
+        }
 
         /**
          * Resets this builder to the default values.
@@ -74,7 +96,7 @@ public interface WaterLily extends Populator {
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
         WaterLily build() throws IllegalStateException;
 

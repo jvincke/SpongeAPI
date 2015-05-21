@@ -24,11 +24,10 @@
  */
 package org.spongepowered.api.world.gen.populator;
 
-import com.google.common.collect.ImmutableSet;
 import org.spongepowered.api.data.type.DoublePlantType;
+import org.spongepowered.api.util.weighted.VariableAmount;
+import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.gen.Populator;
-
-import java.util.Collection;
 
 /**
  * Represents a populator which spawns in an assortment of two block tall
@@ -38,54 +37,43 @@ import java.util.Collection;
 public interface DoublePlant extends Populator {
 
     /**
-     * Gets an immutable set of possible plants which may be selected to be
-     * spawned in by this populator.
+     * Gets a mutable weighted collection of possible plants which may be
+     * selected to be spawned in by this populator.
      * 
      * @return The possible types to be spawned
      */
-    ImmutableSet<DoublePlantType> getPossibleTypes();
+    WeightedTable<DoublePlantType> getPossibleTypes();
 
     /**
-     * Sets which plant types may be spawned in by this populator.
+     * Gets the number of plants to create per chunk.
      * 
-     * @param types A collection of possible types
+     * @return The amount
      */
-    void setPossibleTypes(Collection<DoublePlantType> types);
+    VariableAmount getPlantsPerChunk();
 
     /**
-     * Sets which plant types may be spawned in by this populator.
+     * Sets the number of plants to create per chunk, cannot be negative.
      * 
-     * @param types Possible types
+     * <p><strong>Note:</strong> This number is not a definite number and the
+     * final count of plants which are successfully spawned by the populator
+     * will almost always be lower.</p>
+     * 
+     * @param count The new amount
      */
-    void setPossibleTypes(DoublePlantType... types);
+    void setPlantsPerChunk(VariableAmount count);
 
     /**
-     * Gets the base number of plants to create.
+     * Sets the number of plants to create per chunk, cannot be negative.
      * 
-     * @return The base amount
-     */
-    int getBaseAmount();
-
-    /**
-     * Sets the base number of plants to create, cannot be negative.
+     * <p><strong>Note:</strong> This number is not a definite number and the
+     * final count of plants which are successfully spawned by the populator
+     * will almost always be lower.</p>
      * 
-     * @param count The new base amount
+     * @param count The new amount
      */
-    void setBaseAmount(int count);
-
-    /**
-     * Gets the variance in the amount.
-     * 
-     * @return The amount variance
-     */
-    int getAmountVariance();
-
-    /**
-     * Sets the variance in the amount, must be greater than zero.
-     * 
-     * @param variance The new amount variance
-     */
-    void setAmountVariance(int variance);
+    default void setPlantsPerChunk(int count) {
+        setPlantsPerChunk(VariableAmount.fixed(count));
+    }
 
     /**
      * A builder for constructing {@link DoublePlant} populators.
@@ -98,31 +86,42 @@ public interface DoublePlant extends Populator {
          * @param types Possible types
          * @return This builder, for chaining
          */
-        Builder possibleTypes(DoublePlantType... types);
+        Builder types(WeightedTable<DoublePlantType> types);
 
         /**
-         * Sets which plant types may be spawned in by this populator.
+         * Adds a plant type to the list that may be spawned in by this populator.
          * 
-         * @param types A collection of possible types
+         * @param types The new plant type
+         * @param weight The weight
          * @return This builder, for chaining
          */
-        Builder possibleTypes(Collection<DoublePlantType> types);
+        Builder type(DoublePlantType type, double weight);
 
         /**
-         * Sets the base number of plants to create, cannot be negative.
+         * Sets the number of plants to create, cannot be negative.
+         * 
+         * <p><strong>Note:</strong> This number is not a definite number and
+         * the final count of plants which are successfully spawned by the
+         * populator will almost always be lower.</p>
          * 
          * @param count The new base amount
          * @return This builder, for chaining
          */
-        Builder perChunk(int count);
+        Builder perChunk(VariableAmount count);
 
         /**
-         * Sets the variance in the amount, must be greater than zero.
+         * Sets the number of plants to create, cannot be negative.
          * 
-         * @param variance The new amount variance
+         * <p><strong>Note:</strong> This number is not a definite number and
+         * the final count of plants which are successfully spawned by the
+         * populator will almost always be lower.</p>
+         * 
+         * @param count The new base amount
          * @return This builder, for chaining
          */
-        Builder perChunkVariance(int variance);
+        default Builder perChunk(int count) {
+            return perChunk(VariableAmount.fixed(count));
+        }
 
         /**
          * Resets this builder to the default values.
@@ -137,7 +136,7 @@ public interface DoublePlant extends Populator {
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
         DoublePlant build() throws IllegalStateException;
 

@@ -25,6 +25,7 @@
 package org.spongepowered.api.world.gen.populator;
 
 import org.spongepowered.api.entity.EnderCrystal;
+import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.world.gen.Populator;
 
 /**
@@ -34,84 +35,65 @@ import org.spongepowered.api.world.gen.Populator;
 public interface EnderCrystalPlatform extends Populator {
 
     /**
-     * Gets the chance of a pillar spawning in a chunk. The default value is 5
-     * (therefore equating to a 20% chance or 1 in 5).
+     * Gets the probability of a pillar spawning in a chunk.
      * 
-     * @return The spawn chance
+     * @return The spawn probability
      */
-    int getSpawnChance();
+    double getSpawnProbability();
 
     /**
-     * Sets the chance of a pillar spawning in a chunk. The default value is 5
-     * (therefore equating to a 20% chance or 1 in 5).
+     * Sets the probability of a pillar spawning in a chunk. The default value
+     * is 0.2.
      * 
-     * @param chance The spawn chance
+     * @param p The spawn probability
      */
-    void setSpawnChance(int chance);
+    void setSpawnProbability(double p);
 
     /**
-     * Gets the base height of the pillar.
+     * Gets the height of the pillar.
      * 
-     * @return The base height
+     * @return The height
      */
-    int getBaseHeight();
+    VariableAmount getHeight();
 
     /**
-     * Sets the base height of the pillar.
+     * Sets the height of the pillar, cannot be negative.
      * 
-     * @param height The new base height
+     * @param height The new height
      */
-    void setBaseHeight(int height);
+    void setHeight(VariableAmount height);
 
     /**
-     * Gets the height variance of the pillar. The final height will be the base
-     * height plus a random amount between zero (inclusive) and the variance
-     * (exclusive).
+     * Sets the height of the pillar, cannot be negative.
      * 
-     * @return The height variance
+     * @param height The new height
      */
-    int getHeightVariance();
+    default void setHeight(int height) {
+        setHeight(VariableAmount.fixed(height));
+    }
 
     /**
-     * Sets the height variance of the pillar. The final height will be the base
-     * height plus a random amount between zero (inclusive) and the variance
-     * (exclusive).
+     * Gets the radius of the pillar.
      * 
-     * @param variance The new height variance
+     * @return The radius
      */
-    void setHeightVariance(int variance);
+    VariableAmount getRadius();
 
     /**
-     * Gets the base radius of the pillar.
+     * Sets the radius of the pillar, cannot be negative.
      * 
-     * @return The base radius
+     * @param radius The new radius
      */
-    int getBaseRadius();
+    void setRadius(VariableAmount radius);
 
     /**
-     * Sets the base radius of the pillar.
+     * Sets the radius of the pillar, cannot be negative.
      * 
-     * @param radius The new base radius
+     * @param radius The new radius
      */
-    void setBaseRadius(int radius);
-
-    /**
-     * Gets the radius variance of the pillar. The final radius will be the base
-     * radius plus a random amount between zero (inclusive) and the variance
-     * (exclusive).
-     * 
-     * @return The radius variance
-     */
-    int getRadiusVariance();
-
-    /**
-     * Sets the radius variance of the pillar. The final radius will be the base
-     * radius plus a random amount between zero (inclusive) and the variance
-     * (exclusive).
-     * 
-     * @param variance The new radius variance
-     */
-    void setRadiusVariance(int variance);
+    default void setRadius(double radius) {
+        setRadius(VariableAmount.fixed(radius));
+    }
 
     /**
      * A builder for constructing {@link EnderCrystalPlatform} populators.
@@ -119,49 +101,49 @@ public interface EnderCrystalPlatform extends Populator {
     interface Builder {
 
         /**
-         * Sets the chance of a pillar spawning in a chunk. The default value is
-         * 5 (therefore equating to a 20% chance or 1 in 5).
+         * Sets the probability of a pillar spawning in a chunk. The default
+         * value is 0.2.
          * 
-         * @param chance The spawn chance
+         * @param p The spawn probability
          * @return This builder, for chaining
          */
-        Builder chance(int chance);
+        Builder chance(double p);
 
         /**
-         * Sets the base height of the pillar.
+         * Sets the height of the pillar.
          * 
-         * @param height The new base height
+         * @param height The new height
          * @return This builder, for chaining
          */
-        Builder height(int height);
+        Builder height(VariableAmount height);
 
         /**
-         * Sets the height variance of the pillar. The final height will be the
-         * base height plus a random amount between zero (inclusive) and the
-         * variance (exclusive).
+         * Sets the height of the pillar.
          * 
-         * @param variance The new height variance
+         * @param height The new height
          * @return This builder, for chaining
          */
-        Builder heightVariance(int variance);
+        default Builder height(int height) {
+            return height(VariableAmount.fixed(height));
+        }
 
         /**
-         * Sets the base radius of the pillar.
+         * Sets the radius of the pillar.
          * 
-         * @param radius The new base radius
+         * @param radius The base radius
          * @return This builder, for chaining
          */
-        Builder radius(int radius);
+        Builder radius(VariableAmount radius);
 
         /**
-         * Sets the radius variance of the pillar. The final radius will be the
-         * base radius plus a random amount between zero (inclusive) and the
-         * variance (exclusive).
+         * Sets the radius of the pillar.
          * 
-         * @param variance The new radius variance
+         * @param radius The base radius
          * @return This builder, for chaining
          */
-        Builder radiusVariance(int variance);
+        default Builder radius(double radius) {
+            return radius(VariableAmount.fixed(radius));
+        }
 
         /**
          * Resets this builder to the default values.
@@ -176,7 +158,7 @@ public interface EnderCrystalPlatform extends Populator {
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
         EnderCrystalPlatform build() throws IllegalStateException;
 

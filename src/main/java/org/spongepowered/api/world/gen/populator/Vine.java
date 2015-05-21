@@ -24,63 +24,65 @@
  */
 package org.spongepowered.api.world.gen.populator;
 
-import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.world.gen.Populator;
 
 /**
- * Represents a populator which creates the ground cover of bushes as found in
- * jungle biomes.
+ * Represents a populator which places large amounts of vines on surfaces within
+ * the chunk.
  */
-public interface JungleBush extends Populator {
+public interface Vine extends Populator {
 
     /**
-     * Gets the {@link BlockState} to spawn the trunk of the brush with.
+     * Gets the number of vines to attempt to spawn per chunk, must be greater
+     * than zero.
      * 
-     * @return The trunk block state
+     * @return The number to spawn
      */
-    BlockState getTrunkMaterial();
+    VariableAmount getVinesPerChunk();
 
     /**
-     * Sets the {@link BlockState} to spawn the trunk of the brush with.
+     * Sets the number of vines to attempt to spawn per chunk, must be greater
+     * than zero. The default value is 50.
      * 
-     * @param material The new trunk block state
+     * @param count The new amount to spawn
      */
-    void setTrunkMaterial(BlockState material);
+    void setVinesPerChunk(VariableAmount count);
 
     /**
-     * Gets the {@link BlockState} to spawn the leaves of the brush with.
+     * Sets the number of vines to attempt to spawn per chunk, must be greater
+     * than zero. The default value is 50.
      * 
-     * @return The leaves block state
+     * @param count The new amount to spawn
      */
-    BlockState getLeavesMaterial();
+    default void setVinesPerChunk(int count) {
+        setVinesPerChunk(VariableAmount.fixed(count));
+    }
 
     /**
-     * Sets the {@link BlockState} to spawn the leaves of the brush with.
-     * 
-     * @param material The new leaves block state
-     */
-    void setLeavesMaterial(BlockState material);
-
-    /**
-     * A builder for constructing {@link JungleBush} populators.
+     * A builder for constructing {@link Vine} populators.
      */
     interface Builder {
 
         /**
-         * Sets the {@link BlockState} to spawn the trunk of the brush with.
+         * Sets the number of vines to attempt to spawn per chunk. The default
+         * value is 50.
          * 
-         * @param material The new trunk block state
+         * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        Builder trunkMaterial(BlockState material);
+        Builder perChunk(VariableAmount count);
 
         /**
-         * Sets the {@link BlockState} to spawn the leaves of the brush with.
+         * Sets the number of vines to attempt to spawn per chunk. The default
+         * value is 50.
          * 
-         * @param material The new leaves block state
+         * @param count The new amount to spawn
          * @return This builder, for chaining
          */
-        Builder leavesMaterial(BlockState material);
+        default Builder perChunk(int count) {
+            return perChunk(VariableAmount.fixed(count));
+        }
 
         /**
          * Resets this builder to the default values.
@@ -90,15 +92,14 @@ public interface JungleBush extends Populator {
         Builder reset();
 
         /**
-         * Builds a new instance of a {@link JungleBush} populator with the
-         * settings set within the builder.
+         * Builds a new instance of a {@link Vine} populator with the settings
+         * set within the builder.
          * 
          * @return A new instance of the populator
          * @throws IllegalStateException If there are any settings left unset
-         *             which do not have default values
+         *         which do not have default values
          */
-        JungleBush build() throws IllegalStateException;
+        Vine build() throws IllegalStateException;
 
     }
-
 }
