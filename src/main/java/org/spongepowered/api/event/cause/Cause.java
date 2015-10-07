@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.ArrayUtils;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.event.Event;
@@ -39,6 +40,7 @@ import org.spongepowered.api.event.entity.SpawnEntityEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,6 +94,10 @@ public abstract class Cause {
      */
     public static Cause of(Object... objects) {
         return new PresentCause(checkNotNull(objects));
+    }
+
+    public static Cause of(Collection<?> objects) {
+        return new PresentCause(checkNotNull(objects.toArray()));
     }
 
     public static Cause ofNullable(@Nullable Object... objects) {
@@ -288,7 +294,7 @@ public abstract class Cause {
         public boolean equals(@Nullable Object object) {
             if (object instanceof PresentCause) {
                 PresentCause cause = ((PresentCause) object);
-                return Arrays.equals(this.cause, cause.cause);
+                return Arrays.deepEquals(this.cause, cause.cause);
             }
             return false;
         }

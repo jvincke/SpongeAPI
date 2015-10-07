@@ -24,8 +24,16 @@
  */
 package org.spongepowered.api.event;
 
+import static org.mockito.Mockito.mock;
+
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class CauseTest {
 
@@ -71,5 +79,48 @@ public class CauseTest {
         final String causeString = cause.toString();
         System.err.println(causeString);
     }
+
+    @Test
+    public void testPlayerCause() {
+        final Player mockPlayer = mock(Player.class);
+        final Cause playerCause = Cause.of(mockPlayer);
+        final Optional<Player> optional = playerCause.first(Player.class);
+        optional.get();
+    }
+
+    @Test
+    public void testMultiple() {
+        List<Player> mockPlayers = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            mockPlayers.add(mock(Player.class));
+        }
+        final Cause playerCuases = Cause.of(mockPlayers);
+        List<Player> players = playerCuases.allOf(Player.class);
+        assert mockPlayers.containsAll(players) && players.containsAll(mockPlayers);
+    }
+
+    @Test
+    public void testOrder() {
+        List<Player> mockPlayers = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            mockPlayers.add(mock(Player.class));
+        }
+        final Cause playerCauses = Cause.of(mockPlayers);
+        List<Player> players = playerCauses.allOf(Player.class);
+        for (int i = 0; i < 1000; i++) {
+            assert mockPlayers.get(i) == players.get(i);
+        }
+    }
+
+    @Test
+    public void testEquals() {
+        final Cause aCause = Cause.of("Test");
+        final Cause bCause = Cause.of("Test");
+        final Cause cCause = Cause.of("Derp");
+        assert aCause.equals(bCause) && bCause.equals(aCause);
+        assert !aCause.equals(cCause) && !bCause.equals(cCause);
+    }
+
+
 
 }
