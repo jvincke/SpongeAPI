@@ -28,8 +28,7 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.util.ResettableBuilder;
-
-import java.awt.Color;
+import org.spongepowered.api.util.Color;
 
 /**
  * Represents a particle effect that can be send to the Minecraft client.

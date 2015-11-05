@@ -25,9 +25,9 @@
 package org.spongepowered.api.item;
 
 import org.spongepowered.api.data.DataSerializable;
+import org.spongepowered.api.util.Color;
 import org.spongepowered.api.util.ResettableBuilder;
 
-import java.awt.Color;
 import java.util.List;
 
 /**

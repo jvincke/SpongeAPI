@@ -22,23 +22,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.data.type;
+package org.spongepowered.api.util;
 
-import org.spongepowered.api.CatalogType;
-import org.spongepowered.api.util.Color;
-import org.spongepowered.api.util.annotation.CatalogedBy;
+import static org.junit.Assert.assertTrue;
 
-/**
- * Represents a color of dye that can be used by various items and blocks.
- */
-@CatalogedBy(DyeColors.class)
-public interface DyeColor extends CatalogType {
+import org.junit.Test;
 
-    /**
-     * Gets this dye color as a {@link Color} for easy translation.
-     *
-     * @return The color as a {@link Color}
-     */
-    Color getColor();
+public class ColorTest {
+
+    @Test
+    public void testColorAwtTranslation() {
+        final Color color = Color.of(java.awt.Color.BLUE);
+        final java.awt.Color javaTranslated = color.asJavaColor();
+        assertTrue(java.awt.Color.BLUE.equals(javaTranslated));
+    }
+
+    @Test
+    public void testAverage() {
+        final Color blue = Color.of(java.awt.Color.BLUE);
+        final Color green = Color.of(java.awt.Color.GREEN);
+        final Color average = Color.mixColors(blue, green);
+        final java.awt.Color javaColor = average.asJavaColor();
+        int javaRed = javaColor.getRed();
+        int javaGreen = javaColor.getGreen();
+        int javaBlue = javaColor.getBlue();
+    }
+
+    @Test
+    public void testUnknown() {
+        final java.awt.Color unknown = Color.UNKNOWN.asJavaColor();
+        int javaRed = unknown.getRed();
+        int javaGreen = unknown.getGreen();
+        int javaBlue = unknown.getBlue();
+    }
 
 }
