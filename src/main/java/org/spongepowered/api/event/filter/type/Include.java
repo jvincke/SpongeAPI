@@ -30,13 +30,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Allows listing for a supertype event and filtering to only receive events for
- * a specific subset of the annotated event's subtypes.
+ * Filters out all event types which are no in the specified array of event
+ * classes. This allows listening for a supertype event and filtering to only
+ * receive events for a specific subset of the annotated event's subtypes.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Include {
 
+    /**
+     * Gets the included event types.
+     * 
+     * @return The event types
+     */
     Class<?>[] value();
 
 }

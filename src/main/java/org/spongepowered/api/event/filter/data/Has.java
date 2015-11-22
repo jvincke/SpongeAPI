@@ -24,6 +24,7 @@
  */
 package org.spongepowered.api.event.filter.data;
 
+import org.spongepowered.api.data.DataHolder;
 import org.spongepowered.api.data.manipulator.DataManipulator;
 
 import java.lang.annotation.ElementType;
@@ -31,12 +32,30 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Filters out events where the annotated parameter does not have the specified
+ * data manipulator type.
+ * 
+ * @see DataHolder#get(Class)
+ */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Has {
 
+    /**
+     * Gets the {@link DataManipulator} type to test for.
+     * 
+     * @return The manipulator type
+     */
     Class<? extends DataManipulator<?, ?>> value();
 
+    /**
+     * If true the standard behavior of this filter is reversed and events where
+     * the annotated parameter <string>does have</strong> the specified data
+     * manipulator type are filtered out.
+     * 
+     * @return If the behavior should be reversed
+     */
     boolean inverse() default false;
 
 }
