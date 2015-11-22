@@ -22,24 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.event.filter;
+package org.spongepowered.api.event.filter.data;
 
-import org.spongepowered.api.event.Cancellable;
+import org.spongepowered.api.data.manipulator.DataManipulator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Filters out only events which are cancelled at the time that the listener is
- * called.
- * 
- * <p> The annotated event type <strong>MUST</strong> be cancellable (eg. must
- * extend {@link Cancellable}). </p>
- */
-@Target(ElementType.METHOD)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IsCancelled {
+public @interface Supports {
+
+    Class<? extends DataManipulator<?, ?>> value();
+
+    boolean inverse() default false;
 
 }
