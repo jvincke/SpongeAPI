@@ -29,6 +29,7 @@ import com.flowpowered.math.vector.Vector3i;
 import com.google.common.collect.Maps;
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -114,6 +115,7 @@ import org.spongepowered.api.event.entity.living.human.ChangeGameModeEvent;
 import org.spongepowered.api.event.entity.living.human.ChangeLevelEvent;
 import org.spongepowered.api.event.entity.living.human.TargetHumanEvent;
 import org.spongepowered.api.event.entity.living.player.KickPlayerEvent;
+import org.spongepowered.api.event.entity.living.player.PlayerChangeSettingsEvent;
 import org.spongepowered.api.event.entity.living.player.ResourcePackStatusEvent;
 import org.spongepowered.api.event.entity.living.player.RespawnPlayerEvent;
 import org.spongepowered.api.event.entity.living.player.TargetPlayerEvent;
@@ -2688,6 +2690,32 @@ public class SpongeEventFactory {
         values.put("sink", sink);
         values.put("targetEntity", targetEntity);
         return SpongeEventFactoryUtils.createEventImpl(KickPlayerEvent.class, values);
+    }
+
+    /**
+     * AUTOMATICALLY GENERATED, DO NOT EDIT.
+     * Creates a new instance of
+     * {@link org.spongepowered.api.event.entity.living.player.PlayerChangeSettingsEvent}.
+     * 
+     * @param game The game
+     * @param locale The locale
+     * @param targetEntity The target entity
+     * @param chatVisibility The chat visibility
+     * @param colorsEnabled The colors enabled
+     * @param displayedSkinParts The displayed skin parts
+     * @param viewDistance The view distance
+     * @return A new player change settings event
+     */
+    public static PlayerChangeSettingsEvent createPlayerChangeSettingsEvent(Game game, Locale locale, Player targetEntity, int chatVisibility, boolean colorsEnabled, int displayedSkinParts, int viewDistance) {
+        Map<String, Object> values = Maps.newHashMap();
+        values.put("game", game);
+        values.put("locale", locale);
+        values.put("targetEntity", targetEntity);
+        values.put("chatVisibility", chatVisibility);
+        values.put("colorsEnabled", colorsEnabled);
+        values.put("displayedSkinParts", displayedSkinParts);
+        values.put("viewDistance", viewDistance);
+        return SpongeEventFactoryUtils.createEventImpl(PlayerChangeSettingsEvent.class, values);
     }
 
     /**
