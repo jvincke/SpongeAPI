@@ -25,8 +25,6 @@
 package org.spongepowered.api;
 
 import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.data.ImmutableDataRegistry;
-import org.spongepowered.api.data.manipulator.DataManipulatorRegistry;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.recipe.RecipeRegistry;
@@ -43,13 +41,6 @@ import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.api.util.ResettableBuilder;
 import org.spongepowered.api.util.rotation.Rotation;
-import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.WorldBuilder;
-import org.spongepowered.api.world.WorldCreationSettings;
-import org.spongepowered.api.world.biome.BiomeGenerationSettings;
-import org.spongepowered.api.world.biome.BiomeGenerationSettingsBuilder;
-import org.spongepowered.api.world.explosion.Explosion;
-import org.spongepowered.api.world.explosion.ExplosionBuilder;
 import org.spongepowered.api.world.extent.ExtentBufferFactory;
 import org.spongepowered.api.world.gen.GenerationPopulator;
 import org.spongepowered.api.world.gen.Populator;
