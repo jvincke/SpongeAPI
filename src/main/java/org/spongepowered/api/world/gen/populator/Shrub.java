@@ -29,6 +29,10 @@ import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.gen.Populator;
 
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 /**
  * Represents a populator which places down various variants of
  * {@link ShrubType}s within the chunk.
@@ -66,6 +70,32 @@ public interface Shrub extends Populator {
      */
     default void setShrubsPerChunk(int count) {
         setShrubsPerChunk(VariableAmount.fixed(count));
+    }
+
+    /**
+     * Gets the overriding supplier if it exists. If the supplier is present
+     * then it is used in place of the weighted table while determining what
+     * ShrubType to place.
+     * 
+     * @return The supplier override
+     */
+    Supplier<ShrubType> getSupplierOverride();
+
+    /**
+     * Sets the overriding supplier. If the supplier is present then it is used
+     * in place of the weighted table while determining what ShrubType to
+     * place.
+     * 
+     * @param override The new supplier override, or null
+     */
+    void setSupplierOverride(@Nullable Supplier<ShrubType> override);
+
+    /**
+     * Clears the supplier override to force the weighted table to be used
+     * instead.
+     */
+    default void clearSupplierOverride() {
+        setSupplierOverride(null);
     }
 
     /**
@@ -109,6 +139,15 @@ public interface Shrub extends Populator {
          * @return This builder, for chaining
          */
         Builder type(ShrubType type, int weight);
+
+        /**
+         * Sets the overriding supplier. If the supplier is present then it is used
+         * in place of the weighted table.
+         * 
+         * @param override The new supplier override, or null
+         * @return This builder, for chaining
+         */
+        Builder supplier(Supplier<ShrubType> override);
 
         /**
          * Resets this builder to the default values.

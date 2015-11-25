@@ -29,6 +29,10 @@ import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.gen.Populator;
 
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 /**
  * Represents a populator which scatters flowers randomly around a chunk.
  */
@@ -75,6 +79,32 @@ public interface Flower extends Populator {
      * @return The plant types
      */
     WeightedTable<PlantType> getFlowerTypes();
+
+    /**
+     * Gets the overriding supplier if it exists. If the supplier is present
+     * then it is used in place of the weighted table while determining what
+     * PlantType to place.
+     * 
+     * @return The supplier override
+     */
+    Supplier<PlantType> getSupplierOverride();
+
+    /**
+     * Sets the overriding supplier. If the supplier is present then it is used
+     * in place of the weighted table while determining what PlantType to
+     * place.
+     * 
+     * @param override The new supplier override, or null
+     */
+    void setSupplierOverride(@Nullable Supplier<PlantType> override);
+
+    /**
+     * Clears the supplier override to force the weighted table to be used
+     * instead.
+     */
+    default void clearSupplierOverride() {
+        setSupplierOverride(null);
+    }
 
     /**
      * A builder for constructing {@link Flower} populators.
@@ -125,6 +155,15 @@ public interface Flower extends Populator {
          * @return This builder, for chaining
          */
         Builder type(PlantType type, double weight);
+
+        /**
+         * Sets the overriding supplier. If the supplier is present then it is used
+         * in place of the weighted table.
+         * 
+         * @param override The new supplier override, or null
+         * @return This builder, for chaining
+         */
+        Builder supplier(Supplier<PlantType> override);
 
         /**
          * Resets this builder to the default values.

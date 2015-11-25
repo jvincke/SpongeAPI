@@ -30,6 +30,10 @@ import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.type.MushroomType;
 import org.spongepowered.api.world.gen.type.MushroomTypes;
 
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 /**
  * Represents a populator which places a number of mushrooms. The type of
  * mushroom to place can be set or can be randomized.
@@ -84,6 +88,32 @@ public interface Mushroom extends Populator {
     }
 
     /**
+     * Gets the overriding supplier if it exists. If the supplier is present
+     * then it is used in place of the weighted table while determining what
+     * MushroomType to place.
+     * 
+     * @return The supplier override
+     */
+    Supplier<MushroomType> getSupplierOverride();
+
+    /**
+     * Sets the overriding supplier. If the supplier is present then it is used
+     * in place of the chance table while determining what MushroomType to
+     * place.
+     * 
+     * @param override The new supplier override, or null
+     */
+    void setSupplierOverride(@Nullable Supplier<MushroomType> override);
+
+    /**
+     * Clears the supplier override to force the chance table to be used
+     * instead.
+     */
+    default void clearSupplierOverride() {
+        setSupplierOverride(null);
+    }
+
+    /**
      * A builder for constructing {@link Mushroom} populators.
      */
     interface Builder {
@@ -132,6 +162,15 @@ public interface Mushroom extends Populator {
         default Builder mushroomsPerChunk(int count) {
             return mushroomsPerChunk(VariableAmount.fixed(count));
         }
+
+        /**
+         * Sets the overriding supplier. If the supplier is present then it is used
+         * in place of the chance table.
+         * 
+         * @param override The new supplier override, or null
+         * @return This builder, for chaining
+         */
+        Builder supplier(Supplier<MushroomType> override);
 
         /**
          * Resets this builder to the default values.

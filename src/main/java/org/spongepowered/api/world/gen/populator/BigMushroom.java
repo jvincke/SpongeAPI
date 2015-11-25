@@ -29,6 +29,11 @@ import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.PopulatorObject;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 /**
  * Represents a populator which places a number of mushrooms. The type of
  * mushroom to place can be set or can be randomized.
@@ -36,8 +41,7 @@ import org.spongepowered.api.world.gen.PopulatorObject;
 public interface BigMushroom extends Populator {
 
     /**
-     * Gets a mutable {@link WeightedTable} of possible mushroom types to
-     * spawn.
+     * Gets a mutable {@link WeightedTable} of possible mushroom types to spawn.
      * 
      * @return The weighted list
      */
@@ -79,6 +83,32 @@ public interface BigMushroom extends Populator {
      */
     default void setMushroomsPerChunk(int count) {
         setMushroomsPerChunk(VariableAmount.fixed(count));
+    }
+
+    /**
+     * Gets the overriding supplier if it exists. If the supplier is present
+     * then it is used in place of the weighted table while determining what
+     * PopulatorObject to place.
+     * 
+     * @return The supplier override
+     */
+    Optional<Supplier<PopulatorObject>> getSupplierOverride();
+
+    /**
+     * Sets the overriding supplier. If the supplier is present then it is used
+     * in place of the weighted table while determining what PopulatorObject to
+     * place.
+     * 
+     * @param override The new supplier override, or null
+     */
+    void setSupplierOverride(@Nullable Supplier<PopulatorObject> override);
+
+    /**
+     * Clears the supplier override to force the weighted table to be used
+     * instead.
+     */
+    default void clearSupplierOverride() {
+        setSupplierOverride(null);
     }
 
     /**
@@ -130,6 +160,15 @@ public interface BigMushroom extends Populator {
         default Builder mushroomsPerChunk(int count) {
             return mushroomsPerChunk(VariableAmount.fixed(count));
         }
+
+        /**
+         * Sets the overriding supplier. If the supplier is present then it is used
+         * in place of the weighted table.
+         * 
+         * @param override The new supplier override, or null
+         * @return This builder, for chaining
+         */
+        Builder supplier(Supplier<PopulatorObject> override);
 
         /**
          * Resets this builder to the default values.

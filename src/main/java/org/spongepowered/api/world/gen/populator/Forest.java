@@ -30,6 +30,10 @@ import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.PopulatorObject;
 import org.spongepowered.api.world.gen.type.BiomeTreeType;
 
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 /**
  * A populator which will place several trees into a chunk in order to create a
  * forest.
@@ -63,12 +67,38 @@ public interface Forest extends Populator {
     }
 
     /**
-     * Gets the a mutable weighted collection of {@link BiomeTreeType}s to
+     * Gets the a mutable weighted collection of {@link PopulatorObject}s to
      * spawn.
      * 
      * @return The type to spawn
      */
     WeightedTable<PopulatorObject> getTypes();
+
+    /**
+     * Gets the overriding supplier if it exists. If the supplier is present
+     * then it is used in place of the weighted table while determining what
+     * PopulatorObject to place.
+     * 
+     * @return The supplier override
+     */
+    Supplier<PopulatorObject> getSupplierOverride();
+
+    /**
+     * Sets the overriding supplier. If the supplier is present then it is used
+     * in place of the weighted table while determining what PopulatorObject to
+     * place.
+     * 
+     * @param override The new supplier override, or null
+     */
+    void setSupplierOverride(@Nullable Supplier<PopulatorObject> override);
+
+    /**
+     * Clears the supplier override to force the weighted table to be used
+     * instead.
+     */
+    default void clearSupplierOverride() {
+        setSupplierOverride(null);
+    }
 
     /**
      * A builder for constructing {@link Forest} populators.
@@ -111,6 +141,15 @@ public interface Forest extends Populator {
          * @return This builder, for chaining
          */
         Builder type(PopulatorObject type, double weight);
+
+        /**
+         * Sets the overriding supplier. If the supplier is present then it is used
+         * in place of the weighted table.
+         * 
+         * @param override The new supplier override, or null
+         * @return This builder, for chaining
+         */
+        Builder supplier(Supplier<PopulatorObject> override);
 
         /**
          * Resets this builder to the default values.

@@ -29,6 +29,10 @@ import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.gen.Populator;
 
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 /**
  * Represents a populator which spawns in an assortment of two block tall
  * plants. The number of plants attempted to be generated is
@@ -73,6 +77,32 @@ public interface DoublePlant extends Populator {
      */
     default void setPlantsPerChunk(int count) {
         setPlantsPerChunk(VariableAmount.fixed(count));
+    }
+
+    /**
+     * Gets the overriding supplier if it exists. If the supplier is present
+     * then it is used in place of the weighted table while determining what
+     * DoublePlantType to place.
+     * 
+     * @return The supplier override
+     */
+    Supplier<DoublePlantType> getSupplierOverride();
+
+    /**
+     * Sets the overriding supplier. If the supplier is present then it is used
+     * in place of the weighted table while determining what DoublePlantType to
+     * place.
+     * 
+     * @param override The new supplier override, or null
+     */
+    void setSupplierOverride(@Nullable Supplier<DoublePlantType> override);
+
+    /**
+     * Clears the supplier override to force the weighted table to be used
+     * instead.
+     */
+    default void clearSupplierOverride() {
+        setSupplierOverride(null);
     }
 
     /**
@@ -122,6 +152,15 @@ public interface DoublePlant extends Populator {
         default Builder perChunk(int count) {
             return perChunk(VariableAmount.fixed(count));
         }
+
+        /**
+         * Sets the overriding supplier. If the supplier is present then it is used
+         * in place of the weighted table.
+         * 
+         * @param override The new supplier override, or null
+         * @return This builder, for chaining
+         */
+        Builder supplier(Supplier<DoublePlantType> override);
 
         /**
          * Resets this builder to the default values.
